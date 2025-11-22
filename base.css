@@ -1,0 +1,27 @@
+body {
+	margin-bottom: 300px;
+}
+
+div.frm {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+td {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+.tblHomework {
+    display: table;
+}
+.tblExpand {
+    display: table;
+}
+.tblHide {
+	display: none;
+}

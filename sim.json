@@ -1,0 +1,28 @@
+{
+	"home": {
+		"numProperties": 1
+		, "homeSizeSqf": 1000
+		, "rentalAvgPsf": 3.0
+		, "purchPrice": 2000000
+		, "downpayPct": 25
+		, "renoCost": 100000
+		, "appreciationPct": 3.0
+		, "sellFeePct": 4.0
+	}, 
+	"loan": {
+		"interestPctAnnual": 2.0
+		, "loanTermYrs": 30
+	}, 
+	"cost": {
+		"inflationPct": 1.0
+		, "hoaMonth": 500
+		, "insuranceAnnual": 1000
+		, "utilitiesMonth": 300
+	}, 
+	"rental": {
+		"startAtYr": 0
+		, "appreciationPct": 1.0
+		, "rentalIncome": 5000
+		, "managementFeeMonth": 300
+	}
+}

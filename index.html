@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real Estate (Singapore) Common Library (v1.0.0)</title>
+  <link rel="stylesheet" href="base.css">
+  <script src="entry.js"></script>
+</head>
+<body onload="runMain()">
+  <div id="content">
+    <p>Real Estate (Singapore) Simulation</p>
+		<button type="button" onclick="openFileSelectorForSim()">Load Simulation</button>
+		<p></p>
+  </div>
+  <div class="frm" id="frmHomeInfo">
+    <h2>Home Info</h2>
+    <label for="numProperties">Number of owned properties including this purchase:</label>
+    <input type="number" id="numProperties" min="0" onchange="recalculate()" />
+    <p />
+    <label for="homeSize">Home size (sqf):</label>
+    <input type="number" id="homeSize" min="0" onchange="recalculate()" />
+    <label for="rentalAvgPsf">Average rent (psf):</label>
+    <input type="number" id="rentalAvgPsf" min="0" step="0.1" onchange="recalculate()" />
+		<p />
+    <label for="purchPrice">Purchase Price:</label>
+    <input type="number" id="purchPrice" min="0" step="50000" onchange="recalculate()" />
+    <label for="downpayPct">Downpayment(%):</label>
+    <input type="number" id="downpayPct" min="0" max="100" step="1" onchange="recalculate()" />
+    <label for="downpay">Downpayment:</label>
+    <input type="text" id="downpay" disabled />
+    <p />
+    <label for="renoCost">Renovation:</label>
+    <input type="number" id="renoCost" min="0" step="10000" onchange="recalculate()" />
+    <p />
+    <label for="bsd">BSD:</label>
+    <input type="text" id="bsd" disabled />
+    <label for="absd">ABSD:</label>
+    <input type="text" id="absd" disabled />
+    <label for="outOfPocket">Total out-of-pocket:</label>
+    <input type="text" id="outOfPocket" disabled />
+    <p />
+    <label for="homeAppreciation">Home Price Appreciation (%/yr):</label>
+    <input type="number" id="homeAppreciation" min="0" step="0.1" onchange="recalculate()" />
+    <label for="sellFeePct">Selling Fee (%):</label>
+    <input type="number" id="sellFeePct" min="0" step="1" onchange="recalculate()" />
+  </div>
+  <div class="frm" id="frmLoanTerms">
+    <h2>Loan Terms</h2>
+    <label for="loanAmt">Loan Amount:</label>
+    <input type="text" id="loanAmt" disabled />
+    <p />
+    <label for="annualIR">Annual Interest (%):</label>
+    <input type="number" id="annualIR" min="0" step="0.1" onchange="recalculate()" />
+    <label for="monthlyIR">Monthly Interest:</label>
+    <input type="text" id="monthlyIR" disabled />
+    <p />
+    <label for="loanYrs">Loan term (years):</label>
+    <input type="number" id="loanYrs" min="0" onchange="recalculate()" />
+    <label for="numPaymt">Number of monthly payments:</label>
+    <input type="text" id="numPaymt" disabled />
+    <h3>Payments</h3>
+    <label for="monthlyPayment">Monthly:</label>
+    <input type="text" id="monthlyPayment" disabled />
+    <label for="annualPayment">Annually:</label>
+    <input type="text" id="annualPayment" disabled />
+  </div>
+  <div class="frm" id="frmOngoingCost">
+    <h2>Ongoing Costs: Standard</h2>
+    <label for="costInflation">Inflation (%/yr):</label>
+    <input type="number" id="costInflation" min="0" step="0.1" onchange="recalculate()" />
+		<p />
+    <label for="costHOA">Condo Maintenance (/mth):</label>
+    <input type="number" id="costHOA" min="0" onchange="recalculate()" />
+    <label for="costInsurance">Insurance (/yr):</label>
+    <input type="number" id="costInsurance" min="0" onchange="recalculate()" />
+    <h2>Ongoing Costs: Living in Home</h2>
+    <label for="costUtilities">Utilities (/mth):</label>
+    <input type="number" id="costUtilities" min="0" onchange="recalculate()" />
+  </div>
+  <div class="frm" id="frmRental">
+    <h2>Rentals</h2>
+    <p><b>Affects: </b>Cost if renting instead of buying, rental income when renting out</p>
+    <label for="rentalStartAtYr">Rental starts at Year:</label>
+    <input type="number" id="rentalStartAtYr" min="0" onchange="recalculate()" />
+    <label for="rentalAppreciation">Rental Appreciation (%/yr):</label>
+    <input type="number" id="rentalAppreciation" min="0" step="0.1" onchange="recalculate()" />
+    <p />
+    <label for="rentalIncome">Rental Income (/mth):</label>
+    <input type="number" id="rentalIncome" min="0" step="100" onchange="recalculate()" />
+    <label for="rentalMgmtCost">Property Mgmt Cost (/mth):</label>
+    <input type="number" id="rentalMgmtCost" min="0" step="100" onchange="recalculate()" />
+  </div>
+	<div id="Comparison">
+		<h2>Strategy Comparison</h2>
+		<h3>Strategy: Buy and Stay</h3>
+    <table id="stratBuyStay" class="tblHomework">
+    </table>
+
+		<h3>Strategy: Buy and Rent out</h3>
+    <table id="stratBuyRentout" class="tblHomework">
+    </table>
+	</div>
+	<div id="homework">
+		<h2>Homework</h2>
+
+		<h3 id="homeworkHomeInfoHdr" onclick="toggleHomeworkHomeInfo()">- Home</h3>
+    <table id="homeworkHomeInfo" class="tblHomework">
+    </table>
+
+		<h3 id="homeworkRentalHdr" onclick="toggleHomeworkRental()">- Rentals</h3>
+    <table id="homeworkRental" class="tblHomework">
+    </table>
+	</div>
+</body>
+</html>
