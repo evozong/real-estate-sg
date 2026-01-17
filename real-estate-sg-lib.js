@@ -1,15 +1,15 @@
 function calcDownpayment(homePrice, downpaymentPct) {
-    console.info("calcDownpayment(" + homePrice + ", " + downpaymentPct + ")");
+    console.debug("calcDownpayment(" + homePrice + ", " + downpaymentPct + ")");
 
     let downpay = (downpaymentPct/100.0) * homePrice;
-    console.info("\tdownpay = " + downpay);
+    console.debug("\tdownpay = " + downpay);
     return downpay;
 }
 function calcMortgageAmt(homePrice, downpaymentPct) {
-    console.info("calcMortgageAmt(" + homePrice + ", " + downpaymentPct + ")");
+    console.debug("calcMortgageAmt(" + homePrice + ", " + downpaymentPct + ")");
 
     let homeLoanAmt = (1.0 - (downpaymentPct/100.0)) * homePrice;
-    console.info("\thomeLoanAmt = " + homeLoanAmt);
+    console.debug("\thomeLoanAmt = " + homeLoanAmt);
     return homeLoanAmt;
 }
 
@@ -33,7 +33,7 @@ function applyBrackets(brackets, val) {
 }
 
 function calcBuyerStampDuty(purchasePrice, marketValue = 0) {
-    console.info("calcBuyerStampInfo(" + purchasePrice + ", " + marketValue + ")");
+    console.debug("calcBuyerStampInfo(" + purchasePrice + ", " + marketValue + ")");
     // Reference: https://www.iras.gov.sg/taxes/stamp-duty/for-property/buying-or-acquiring-property/buyer's-stamp-duty-(bsd)
     // Note: For residential only! Non-residential have different formula.
     // BSD is computed based on the purchase price or market value of the property, whichever is higher.
@@ -50,17 +50,17 @@ function calcBuyerStampDuty(purchasePrice, marketValue = 0) {
 
 		let bsd = applyBrackets(brackets, computeOn);
 
-    console.info("\tbsd = " + bsd);
+    console.debug("\tbsd = " + bsd);
     return bsd;
 }
 
 function additionalBuyerStampDuty(numProperties, purchasePrice, marketValue = 0) {
-    console.info("calcAdditionalBuyerStampDuty(" + numProperties + ", " + purchasePrice + ", "+ marketValue + ")");
+    console.debug("calcAdditionalBuyerStampDuty(" + numProperties + ", " + purchasePrice + ", "+ marketValue + ")");
     // Reference: https://www.iras.gov.sg/taxes/stamp-duty/for-property/buying-or-acquiring-property/additional-buyer's-stamp-duty-(absd)
     // Note: For Singaporean Citizens only! PRs, foreigners, business, trust have different rates
 
     if (numProperties <= 1) {
-        console.info("\tabsd = 0");
+        console.debug("\tabsd = 0");
         return 0.0;
     }
 
@@ -72,12 +72,12 @@ function additionalBuyerStampDuty(numProperties, purchasePrice, marketValue = 0)
         absd = 0.25 * computeOn;
     }
 
-    console.info("\tabsd = " + absd);
+    console.debug("\tabsd = " + absd);
     return absd;
 }
 
 function calcMonthlyPayments(loanAmount, monthlyInterestRate, numPayments) {
-  console.info("calcMonthlyPayments(" + typeof(loanAmount) + ":" + loanAmount + ", " + typeof(monthlyInterestRate) + ":" + monthlyInterestRate + ", " + typeof(numPayments) + ":" + numPayments + ")");
+  console.debug("calcMonthlyPayments(" + typeof(loanAmount) + ":" + loanAmount + ", " + typeof(monthlyInterestRate) + ":" + monthlyInterestRate + ", " + typeof(numPayments) + ":" + numPayments + ")");
   // Assumes MONTHLY payments!
   // Reference: https://en.wikipedia.org/wiki/Amortization_calculator
   // A = P * (term1 / term2)
@@ -87,13 +87,13 @@ function calcMonthlyPayments(loanAmount, monthlyInterestRate, numPayments) {
 
   let onePlusI = 1.0 + monthlyInterestRate;
   let powTerm = Math.pow(onePlusI, numPayments);
-  console.info("\tpowTerm = " + powTerm);
+  console.debug("\tpowTerm = " + powTerm);
   
   let term1 = monthlyInterestRate * powTerm;
   let term2 = powTerm - 1;
 
   let payment = loanAmount * term1 / term2;
-  console.info("\tPayment = " + payment);
+  console.debug("\tPayment = " + payment);
   return payment;
 }
 
@@ -173,7 +173,7 @@ function genScheduleSellerStampDuty(scheduleHomeValue) {
 }
 
 function genSchedulePrincipalRemaining(loanAmt, monthlyPayment, interestMonth, genUntilYrs) {
-	console.info(loanAmt + "," + monthlyPayment +","+ interestMonth + ","+ genUntilYrs);
+	console.debug(loanAmt + "," + monthlyPayment +","+ interestMonth + ","+ genUntilYrs);
 	let schedule = [];
 	interestMonth += 1.0;
 
@@ -308,7 +308,7 @@ function genSchedOutflowYrRental(schedOutflowStdYr, schedPropertyTaxRental, sche
 }
 
 function calcRentalPerYear(rentalStartAtYr, rentalIncome, rentalMgmtCost, rentalAppreciation, genUntilYrs) {
-	console.info("calcRentalPerYear(" + rentalStartAtYr + ", " + rentalIncome + ", " + rentalMgmtCost + ", " + rentalAppreciation + ", " + genUntilYrs + ")");
+	console.debug("calcRentalPerYear(" + rentalStartAtYr + ", " + rentalIncome + ", " + rentalMgmtCost + ", " + rentalAppreciation + ", " + genUntilYrs + ")");
 
 	let rentalPerYear = [];
 	let rentalAtYear = rentalIncome;
@@ -326,7 +326,7 @@ function calcRentalPerYear(rentalStartAtYr, rentalIncome, rentalMgmtCost, rental
 		rentalAtYear *= rentalAppreciation;
 	}
 
-	console.info("\t" + JSON.stringify(rentalPerYear, null, 2));
+	console.debug("\t" + JSON.stringify(rentalPerYear, null, 2));
 	return rentalPerYear;
 }
 

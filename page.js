@@ -153,49 +153,12 @@ function openFileSelectorForSim() {
 }
 
 
+function loadDefaultSimulation() {
+	loadSimulation(sim);
+}
 
 function loadSimulation(theSim) {
 	sim = theSim;
-
-	sim.home.downpayAmt = () => {
-		return calcDownpayment(sim.home.purchPrice, sim.home.downpayPct);
-	}
-	sim.home.bsd = () => {
-		return calcBuyerStampDuty(sim.home.purchPrice);
-	}
-	sim.home.absd = () => {
-		return additionalBuyerStampDuty(sim.home.numProperties, sim.home.purchPrice);
-	}
-	sim.home.appreciation = () => {
-		return sim.home.appreciationPct / 100.0;
-	}
-	sim.home.sellFee = () => {
-		return sim.home.sellFeePct / 100.0;
-	}
-	sim.home.outOfPocket = () => {
-		return sim.home.downpayAmt() + sim.home.renoCost + sim.home.bsd() + sim.home.absd();
-	}
-	sim.loan.loanAmt = () => {
-		return calcMortgageAmt(sim.home.purchPrice, sim.home.downpayPct);
-	}
-	sim.loan.interestMonth = () => {
-		return sim.loan.interestPctAnnual / 12.0 / 100.0;
-	}
-	sim.loan.numPayments = () => {
-		return sim.loan.loanTermYrs * 12;
-	}
-	sim.loan.paymentMonthly = () => {
-		return calcMonthlyPayments(sim.loan.loanAmt(), sim.loan.interestMonth(), sim.loan.numPayments());
-	}
-	sim.loan.paymentAnnual = () => {
-		return sim.loan.paymentMonthly() * 12;
-	}
-	sim.cost.inflation = () => {
-		return sim.cost.inflationPct / 100.0;
-	}
-	sim.rental.appreciation = () => {
-		return sim.rental.appreciationPct / 100.0;
-	}
 
 	document.getElementById("numProperties").value = sim.home.numProperties;
 	document.getElementById("homeSize").value = sim.home.homeSizeSqf;
@@ -232,18 +195,61 @@ function updateFromUI() {
 	sim.home.appreciationPct = Number.parseFloat(document.getElementById("homeAppreciation").value);
 	sim.home.sellFeePct = Number.parseFloat(document.getElementById("sellFeePct").value);
 
+	sim.home.downpayAmt = () => {
+		return calcDownpayment(sim.home.purchPrice, sim.home.downpayPct);
+	}
+	sim.home.bsd = () => {
+		return calcBuyerStampDuty(sim.home.purchPrice);
+	}
+	sim.home.absd = () => {
+		return additionalBuyerStampDuty(sim.home.numProperties, sim.home.purchPrice);
+	}
+	sim.home.appreciation = () => {
+		return sim.home.appreciationPct / 100.0;
+	}
+	sim.home.sellFee = () => {
+		return sim.home.sellFeePct / 100.0;
+	}
+	sim.home.outOfPocket = () => {
+		return sim.home.downpayAmt() + sim.home.renoCost + sim.home.bsd() + sim.home.absd();
+	}
+
 	sim.loan.interestPctAnnual = Number.parseFloat(document.getElementById("annualIR").value);
 	sim.loan.loanTermYrs = Number.parseInt(document.getElementById("loanYrs").value);
+
+	sim.loan.loanAmt = () => {
+		return calcMortgageAmt(sim.home.purchPrice, sim.home.downpayPct);
+	}
+	sim.loan.interestMonth = () => {
+		return sim.loan.interestPctAnnual / 12.0 / 100.0;
+	}
+	sim.loan.numPayments = () => {
+		return sim.loan.loanTermYrs * 12;
+	}
+	sim.loan.paymentMonthly = () => {
+		return calcMonthlyPayments(sim.loan.loanAmt(), sim.loan.interestMonth(), sim.loan.numPayments());
+	}
+	sim.loan.paymentAnnual = () => {
+		return sim.loan.paymentMonthly() * 12;
+	}
 
 	sim.cost.inflationPct = Number.parseFloat(document.getElementById("costInflation").value);
 	sim.cost.hoaMonth = Number.parseFloat(document.getElementById("costHOA").value);
 	sim.cost.insuranceAnnual = Number.parseFloat(document.getElementById("costInsurance").value);
 	sim.cost.utilitiesMonth = Number.parseFloat(document.getElementById("costUtilities").value);
 
+	sim.cost.inflation = () => {
+		return sim.cost.inflationPct / 100.0;
+	}
+
 	sim.rental.startAtYr = Number.parseInt(document.getElementById("rentalStartAtYr").value);
 	sim.rental.appreciationPct = Number.parseFloat(document.getElementById("rentalAppreciation").value);
 	sim.rental.rentalIncome = Number.parseFloat(document.getElementById("rentalIncome").value);
 	sim.rental.managementFeeMonth = Number.parseFloat(document.getElementById("rentalMgmtCost").value);
+
+	sim.rental.appreciation = () => {
+		return sim.rental.appreciationPct / 100.0;
+	}
 }
 
 function updateUI() {
