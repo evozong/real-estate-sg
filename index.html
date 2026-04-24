@@ -8,8 +8,10 @@
 <body onload="runMain()">
   <div id="content">
     <p>Real Estate (Singapore) Simulation</p>
-		<button type="button" onclick="openFileSelectorForSim()">Load Simulation</button>
 		<button type="button" onclick="loadDefaultSimulation()">Load Defaults</button>
+		<span style="display:inline-block; width:1.5em"></span>
+		<button type="button" onclick="openFileSelectorForSim()">Load Simulation</button>
+		<button type="button" id="btnSave" onclick="saveSimulation()" disabled>Save Simulation</button>
 		<p></p>
   </div>
   <div class="frm" id="frmHomeInfo">

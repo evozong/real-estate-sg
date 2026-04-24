@@ -30,7 +30,7 @@ function toggleHomeworkHomeInfo(setVisible = undefined) {
 const genUntilYrs = 30;
 
 // Simulation defaults
-var sim = {
+const defaultSim = {
 	home: {
 		numProperties: 1
 		, homeSizeSqf: 1000
@@ -58,6 +58,8 @@ var sim = {
 		, managementFeeMonth: 300
 	}, 
 };
+
+var sim = structuredClone(defaultSim);
 
 function parseSimJSON(input) {
     // Accept either a JSON string or an already-parsed object
@@ -153,8 +155,64 @@ function openFileSelectorForSim() {
 }
 
 
+function saveSimulation() {
+    updateFromUI();
+
+    const data = {
+        home: {
+            numProperties: sim.home.numProperties,
+            homeSizeSqf: sim.home.homeSizeSqf,
+            rentalAvgPsf: sim.home.rentalAvgPsf,
+            purchPrice: sim.home.purchPrice,
+            downpayPct: sim.home.downpayPct,
+            renoCost: sim.home.renoCost,
+            appreciationPct: sim.home.appreciationPct,
+            sellFeePct: sim.home.sellFeePct,
+        },
+        loan: {
+            interestPctAnnual: sim.loan.interestPctAnnual,
+            loanTermYrs: sim.loan.loanTermYrs,
+        },
+        cost: {
+            inflationPct: sim.cost.inflationPct,
+            hoaMonth: sim.cost.hoaMonth,
+            insuranceAnnual: sim.cost.insuranceAnnual,
+            utilitiesMonth: sim.cost.utilitiesMonth,
+        },
+        rental: {
+            startAtYr: sim.rental.startAtYr,
+            appreciationPct: sim.rental.appreciationPct,
+            rentalIncome: sim.rental.rentalIncome,
+            managementFeeMonth: sim.rental.managementFeeMonth,
+        }
+    };
+
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "simulation.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function isSimDirty() {
+	for (const [section, fields] of Object.entries(defaultSim)) {
+		for (const field of Object.keys(fields)) {
+			if (sim[section]?.[field] !== defaultSim[section][field]) return true;
+		}
+	}
+	return false;
+}
+
 function loadDefaultSimulation() {
-	loadSimulation(sim);
+	if (isSimDirty() && !confirm("This will replace your current values with the defaults. Continue?")) {
+		return;
+	}
+	loadSimulation(structuredClone(defaultSim));
 }
 
 function loadSimulation(theSim) {
@@ -466,11 +524,16 @@ function renderSchedules() {
 	tbl2.appendChild(rowStrategyBuyRentout_NetCashflow);
 }
 
+function updateSaveButton() {
+	document.getElementById("btnSave").disabled = !validateSimShape(sim);
+}
+
 function recalculate() {
 	console.info("Recalculating!");
 	updateFromUI();
 	updateUI();
 
 	renderSchedules();
+	updateSaveButton();
 }
 
