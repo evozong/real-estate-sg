@@ -321,6 +321,10 @@ function updateUI() {
 	document.getElementById("numPaymt").value = sim.loan.numPayments();
 	document.getElementById("monthlyPayment").value = sim.loan.paymentMonthly();
 	document.getElementById("annualPayment").value = sim.loan.paymentAnnual();
+
+	const minMonthly = calcMinMonthlyIncomeForTDSR(sim.loan.paymentMonthly());
+	document.getElementById("minSalaryMonth").value = minMonthly;
+	document.getElementById("minSalaryAnnual").value = minMonthly * 12;
 }
 
 function appendCell(node, label) {

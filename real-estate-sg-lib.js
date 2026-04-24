@@ -361,3 +361,14 @@ function genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, schedul
 
 	return schedule;
 }
+
+function calcMinMonthlyIncomeForTDSR(monthlyDebtPayment) {
+    console.debug("calcMinMonthlyIncomeForTDSR(" + monthlyDebtPayment + ")");
+    // Reference: https://www.mas.gov.sg/regulation/explainers/new-housing-loans/msr-and-tdsr-rules
+    const tdsrLimit = 0.55;
+
+    let minMonthlyIncome = Math.ceil(monthlyDebtPayment / tdsrLimit);
+    console.debug("\tminMonthlyIncome = " + minMonthlyIncome);
+    return minMonthlyIncome;
+}
+
