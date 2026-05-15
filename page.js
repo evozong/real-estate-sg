@@ -499,6 +499,8 @@ function renderSchedules() {
 	let rowIncomeYear = createTableRow("Income or Cost of Rental (/yr)", schedRentalIncomeYr2);
 	rentalHomeworkTable.appendChild(rowIncomeYear);
 
+	let schedRentalIncomeCum = genScheduleCumulative(schedRentalIncomeYr);
+
 	////////////////////////////////////////////////////
 	// Comparison Strategies
 	////////////////////////////////////////////////////
@@ -526,7 +528,7 @@ function renderSchedules() {
 	let rowYr3 = createTableRow("End of Year", scheduleYr3);
 	tbl2.appendChild(rowYr3);
 
-	let scheduleStrategyBuyRentout_NetCashflow = genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, schedOutflowCumRental, schedRentalIncomeYr);
+	let scheduleStrategyBuyRentout_NetCashflow = genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, schedOutflowCumRental, schedRentalIncomeCum);
 	let scheduleStrategyBuyRentout_NetCashflow2 = formatAsCurrencyString(scheduleStrategyBuyRentout_NetCashflow);
 	let rowStrategyBuyRentout_NetCashflow = createTableRow("Net Profit", scheduleStrategyBuyRentout_NetCashflow2);
 	tbl2.appendChild(rowStrategyBuyRentout_NetCashflow);
