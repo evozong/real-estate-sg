@@ -1,122 +1,269 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Real Estate (Singapore) Common Library (v1.0.0)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Estate (Singapore) Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="base.css">
   <script src="entry.js"></script>
 </head>
 <body onload="runMain()">
-  <div id="content">
-    <p>Real Estate (Singapore) Simulation</p>
-		<button type="button" onclick="loadDefaultSimulation()">Load Defaults</button>
-		<span style="display:inline-block; width:1.5em"></span>
-		<button type="button" onclick="openFileSelectorForSim()">Load Simulation</button>
-		<button type="button" id="btnSave" onclick="saveSimulation()" disabled>Save Simulation</button>
-		<p></p>
-  </div>
-  <div class="frm" id="frmHomeInfo">
-    <h2>Home Info</h2>
-    <label for="numProperties">Number of owned properties including this purchase:</label>
-    <input type="number" id="numProperties" min="0" onchange="recalculate()" />
-    <p />
-    <label for="homeSize">Home size (sqf):</label>
-    <input type="number" id="homeSize" min="0" onchange="recalculate()" />
-    <label for="rentalAvgPsf">Average rent (psf):</label>
-    <input type="number" id="rentalAvgPsf" min="0" step="0.1" onchange="recalculate()" />
-		<p />
-    <label for="purchPrice">Purchase Price:</label>
-    <input type="number" id="purchPrice" min="0" step="50000" onchange="recalculate()" />
-    <label for="downpayPct">Downpayment(%):</label>
-    <input type="number" id="downpayPct" min="0" max="100" step="1" onchange="recalculate()" />
-    <label for="downpay">Downpayment:</label>
-    <input type="text" id="downpay" disabled />
-    <p />
-    <label for="renoCost">Renovation:</label>
-    <input type="number" id="renoCost" min="0" step="10000" onchange="recalculate()" />
-    <p />
-    <label for="bsd">BSD:</label>
-    <input type="text" id="bsd" disabled />
-    <label for="absd">ABSD:</label>
-    <input type="text" id="absd" disabled />
-    <label for="outOfPocket">Total out-of-pocket:</label>
-    <input type="text" id="outOfPocket" disabled />
-    <p />
-    <label for="homeAppreciation">Home Price Appreciation (%/yr):</label>
-    <input type="number" id="homeAppreciation" min="0" step="0.1" onchange="recalculate()" />
-    <label for="sellFeePct">Selling Fee (%):</label>
-    <input type="number" id="sellFeePct" min="0" step="1" onchange="recalculate()" />
-  </div>
-  <div class="frm" id="frmLoanTerms">
-    <h2>Loan Terms</h2>
-    <label for="loanAmt">Loan Amount:</label>
-    <input type="text" id="loanAmt" disabled />
-    <p />
-    <label for="annualIR">Annual Interest (%):</label>
-    <input type="number" id="annualIR" min="0" step="0.1" onchange="recalculate()" />
-    <label for="monthlyIR">Monthly Interest:</label>
-    <input type="text" id="monthlyIR" disabled />
-    <p />
-    <label for="loanYrs">Loan term (years):</label>
-    <input type="number" id="loanYrs" min="0" onchange="recalculate()" />
-    <label for="numPaymt">Number of monthly payments:</label>
-    <input type="text" id="numPaymt" disabled />
-    <h3>Payments</h3>
-    <label for="monthlyPayment">Monthly:</label>
-    <input type="text" id="monthlyPayment" disabled />
-    <label for="annualPayment">Annually:</label>
-    <input type="text" id="annualPayment" disabled />
-    <h3>Minimum Salary Required (TDSR &le; 55%)</h3>
-    <label for="minSalaryMonth">Monthly:</label>
-    <input type="text" id="minSalaryMonth" disabled />
-    <label for="minSalaryAnnual">Annually:</label>
-    <input type="text" id="minSalaryAnnual" disabled />
-  </div>
-  <div class="frm" id="frmOngoingCost">
-    <h2>Ongoing Costs: Standard</h2>
-    <label for="costInflation">Inflation (%/yr):</label>
-    <input type="number" id="costInflation" min="0" step="0.1" onchange="recalculate()" />
-		<p />
-    <label for="costHOA">Condo Maintenance (/mth):</label>
-    <input type="number" id="costHOA" min="0" onchange="recalculate()" />
-    <label for="costInsurance">Insurance (/yr):</label>
-    <input type="number" id="costInsurance" min="0" onchange="recalculate()" />
-    <h2>Ongoing Costs: Living in Home</h2>
-    <label for="costUtilities">Utilities (/mth):</label>
-    <input type="number" id="costUtilities" min="0" onchange="recalculate()" />
-  </div>
-  <div class="frm" id="frmRental">
-    <h2>Rentals</h2>
-    <p><b>Affects: </b>Cost if renting instead of buying, rental income when renting out</p>
-    <label for="rentalStartAtYr">Rental starts at Year:</label>
-    <input type="number" id="rentalStartAtYr" min="0" onchange="recalculate()" />
-    <label for="rentalAppreciation">Rental Appreciation (%/yr):</label>
-    <input type="number" id="rentalAppreciation" min="0" step="0.1" onchange="recalculate()" />
-    <p />
-    <label for="rentalIncome">Rental Income (/mth):</label>
-    <input type="number" id="rentalIncome" min="0" step="100" onchange="recalculate()" />
-    <label for="rentalMgmtCost">Property Mgmt Cost (/mth):</label>
-    <input type="number" id="rentalMgmtCost" min="0" step="100" onchange="recalculate()" />
-  </div>
-	<div id="Comparison">
-		<h2>Strategy Comparison</h2>
-		<h3>Strategy: Buy and Stay</h3>
-    <table id="stratBuyStay" class="tblHomework">
-    </table>
 
-		<h3>Strategy: Buy and Rent out</h3>
-    <table id="stratBuyRentout" class="tblHomework">
-    </table>
-	</div>
-	<div id="homework">
-		<h2>Homework</h2>
+  <!-- Sticky Navbar -->
+  <nav class="navbar navbar-dark sticky-top px-4 py-3" style="background-color: var(--c-navy);">
+    <span class="navbar-brand fw-semibold fs-5">SG Real Estate Calculator</span>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-light btn-sm" onclick="loadDefaultSimulation()">Load Defaults</button>
+      <button type="button" class="btn btn-outline-light btn-sm" onclick="openFileSelectorForSim()">Load Simulation</button>
+      <button type="button" class="btn btn-teal btn-sm" id="btnSave" onclick="saveSimulation()" disabled>Save Simulation</button>
+    </div>
+  </nav>
 
-		<h3 id="homeworkHomeInfoHdr" onclick="toggleHomeworkHomeInfo()">- Home</h3>
-    <table id="homeworkHomeInfo" class="tblHomework">
-    </table>
+  <div class="container-xl py-4">
 
-		<h3 id="homeworkRentalHdr" onclick="toggleHomeworkRental()">- Rentals</h3>
-    <table id="homeworkRental" class="tblHomework">
-    </table>
-	</div>
+    <!-- Form Grid -->
+    <div class="row g-4 mb-4">
+
+      <!-- Home Info -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100" id="frmHomeInfo">
+          <div class="card-header card-header-teal">
+            <h5 class="card-title mb-0">Home Info</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label small fw-medium mb-1" for="numProperties">Number of owned properties including this purchase</label>
+                <input class="form-control form-control-sm" type="number" id="numProperties" min="0" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="homeSize">Home size (sqf)</label>
+                <input class="form-control form-control-sm" type="number" id="homeSize" min="0" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="rentalAvgPsf">Average rent (psf)</label>
+                <input class="form-control form-control-sm" type="number" id="rentalAvgPsf" min="0" step="0.1" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="purchPrice">Purchase Price</label>
+                <input class="form-control form-control-sm" type="number" id="purchPrice" min="0" step="50000" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="downpayPct">Downpayment (%)</label>
+                <input class="form-control form-control-sm" type="number" id="downpayPct" min="0" max="100" step="1" value="25" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="downpay">Downpayment</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="downpay" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="renoCost">Renovation</label>
+                <input class="form-control form-control-sm" type="number" id="renoCost" min="0" step="10000" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="bsd">BSD</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="bsd" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="absd">ABSD</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="absd" disabled />
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-medium mb-1 computed-label" for="outOfPocket">Total out-of-pocket</label>
+                <input class="form-control form-control-sm computed-field fw-bold" type="text" id="outOfPocket" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="homeAppreciation">Home Price Appreciation (%/yr)</label>
+                <input class="form-control form-control-sm" type="number" id="homeAppreciation" min="0" step="0.1" value="3" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="sellFeePct">Selling Fee (%)</label>
+                <input class="form-control form-control-sm" type="number" id="sellFeePct" min="0" step="1" value="4" onchange="recalculate()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loan Terms -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100" id="frmLoanTerms">
+          <div class="card-header card-header-teal">
+            <h5 class="card-title mb-0">Loan Terms</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label small fw-medium mb-1 computed-label" for="loanAmt">Loan Amount</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="loanAmt" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="annualIR">Annual Interest (%)</label>
+                <input class="form-control form-control-sm" type="number" id="annualIR" min="0" step="0.1" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="monthlyIR">Monthly Interest</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="monthlyIR" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="loanYrs">Loan term (years)</label>
+                <input class="form-control form-control-sm" type="number" id="loanYrs" min="0" value="30" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="numPaymt">Number of monthly payments</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="numPaymt" disabled />
+              </div>
+              <div class="col-12">
+                <p class="form-subsection-title">Payments</p>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="monthlyPayment">Monthly</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="monthlyPayment" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="annualPayment">Annually</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="annualPayment" disabled />
+              </div>
+              <div class="col-12">
+                <p class="form-subsection-title">Minimum Salary Required (TDSR &le; 55%)</p>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="minSalaryMonth">Monthly</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="minSalaryMonth" disabled />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1 computed-label" for="minSalaryAnnual">Annually</label>
+                <input class="form-control form-control-sm computed-field" type="text" id="minSalaryAnnual" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ongoing Costs -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100" id="frmOngoingCost">
+          <div class="card-header card-header-teal">
+            <h5 class="card-title mb-0">Ongoing Costs</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <p class="form-subsection-title">Standard</p>
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-medium mb-1" for="costInflation">Inflation (%/yr)</label>
+                <input class="form-control form-control-sm" type="number" id="costInflation" min="0" step="0.1" value="2" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="costHOA">Condo Maintenance (/mth)</label>
+                <input class="form-control form-control-sm" type="number" id="costHOA" min="0" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="costInsurance">Insurance (/yr)</label>
+                <input class="form-control form-control-sm" type="number" id="costInsurance" min="0" onchange="recalculate()" />
+              </div>
+              <div class="col-12">
+                <p class="form-subsection-title">Living in Home</p>
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-medium mb-1" for="costUtilities">Utilities (/mth)</label>
+                <input class="form-control form-control-sm" type="number" id="costUtilities" min="0" onchange="recalculate()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rentals -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100" id="frmRental">
+          <div class="card-header card-header-teal">
+            <h5 class="card-title mb-0">Rentals</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small mb-1"><strong>Affects:</strong></p>
+            <ul class="text-muted small mb-3">
+              <li>Cost if renting instead of buying</li>
+              <li>Rental income when renting out</li>
+            </ul>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="rentalStartAtYr">Rental starts at Year</label>
+                <input class="form-control form-control-sm" type="number" id="rentalStartAtYr" min="0" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="rentalAppreciation">Rental Appreciation (%/yr)</label>
+                <input class="form-control form-control-sm" type="number" id="rentalAppreciation" min="0" step="0.1" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="rentalIncome">Rental Income (/mth)</label>
+                <input class="form-control form-control-sm" type="number" id="rentalIncome" min="0" step="100" onchange="recalculate()" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label small fw-medium mb-1" for="rentalMgmtCost">Property Mgmt Cost (/mth)</label>
+                <input class="form-control form-control-sm" type="number" id="rentalMgmtCost" min="0" step="100" onchange="recalculate()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row g-4 -->
+
+    <!-- Strategy Comparison -->
+    <div id="Comparison" class="mb-4">
+      <h4 class="section-heading mb-3">Strategy Comparison</h4>
+
+      <!-- Chart -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <canvas id="cashflowChart" height="120"></canvas>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0">
+        <div class="table-scroll-wrapper">
+          <table class="tblHomework">
+            <tbody>
+              <tr><td colspan="100" class="strategy-label-cell">Buy and Stay</td></tr>
+            </tbody>
+            <tbody id="stratBuyStay"></tbody>
+            <tbody>
+              <tr><td colspan="100" class="strategy-label-cell strategy-label-cell--divider">Buy and Rent Out</td></tr>
+            </tbody>
+            <tbody id="stratBuyRentout"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Homework -->
+    <div id="homework">
+      <h4 class="section-heading mb-3">Homework</h4>
+
+      <div class="card mb-2 border-0 shadow-sm">
+        <h3 id="homeworkHomeInfoHdr" class="homework-toggle-header" onclick="toggleHomeworkHomeInfo()">- Home</h3>
+        <div class="table-scroll-wrapper">
+          <table id="homeworkHomeInfo" class="tblHomework w-100"></table>
+        </div>
+      </div>
+
+      <div class="card mb-2 border-0 shadow-sm">
+        <h3 id="homeworkRentalHdr" class="homework-toggle-header" onclick="toggleHomeworkRental()">- Rentals</h3>
+        <div class="table-scroll-wrapper">
+          <table id="homeworkRental" class="tblHomework w-100"></table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container-xl -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="chart.js"></script>
 </body>
 </html>

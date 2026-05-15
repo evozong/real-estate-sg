@@ -1,27 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --c-navy:          #0F2044;
+  --c-teal:          #0D9B8C;
+  --c-teal-light:    #E6F7F5;
+  --c-bg:            #F0F3F8;
+  --c-white:         #FFFFFF;
+  --c-computed-bg:   #F4F6FB;
+  --c-computed-text: #6B7A99;
+  --c-border:        #DDE3EE;
+  --c-stripe:        #F7F9FC;
+}
+
 body {
-	margin-bottom: 300px;
+  background-color: var(--c-bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin-bottom: 80px;
+  color: #1A2640;
 }
 
-div.frm {
-    border: 1px solid #000;
-    padding: 10px;
+/* ── Computed / read-only fields ── */
+.computed-field {
+  background-color: var(--c-computed-bg) !important;
+  color: var(--c-computed-text) !important;
+  font-style: italic;
+  border-color: var(--c-border) !important;
+  cursor: default;
 }
 
-.bold {
-	font-weight: bold;
+.computed-label {
+  color: var(--c-computed-text);
 }
 
-td {
-    border: 1px solid #000;
-    padding: 10px;
+/* ── Card header variants ── */
+.card-header-teal {
+  background-color: var(--c-teal);
+  color: #fff;
 }
 
+.card-header-navy {
+  background-color: var(--c-navy);
+  color: #fff;
+}
+
+/* ── Teal button ── */
+.btn-teal {
+  background-color: var(--c-teal);
+  border-color: var(--c-teal);
+  color: #fff;
+}
+.btn-teal:hover {
+  background-color: #0b8579;
+  border-color: #0b8579;
+  color: #fff;
+}
+.btn-teal:disabled {
+  background-color: var(--c-teal);
+  opacity: 0.45;
+  color: #fff;
+}
+
+/* ── Section headings ── */
+.section-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-navy);
+  border-left: 4px solid var(--c-teal);
+  padding-left: 0.75rem;
+}
+
+/* ── Sub-section dividers inside form cards ── */
+.form-subsection-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--c-computed-text);
+  border-bottom: 1px solid var(--c-border);
+  padding-bottom: 0.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0 !important;
+}
+
+/* ── Collapsible homework headers ── */
+.homework-toggle-header {
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  background-color: var(--c-white);
+  border-radius: 0.375rem 0.375rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--c-navy);
+  user-select: none;
+  transition: background-color 0.15s;
+}
+.homework-toggle-header:hover {
+  background-color: var(--c-teal-light);
+}
+
+/* ── Strategy section label rows (inside unified table) ── */
+.strategy-label-cell {
+  z-index: 2; /* above regular sticky first-column cells */
+  background-color: var(--c-navy) !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.4rem 0.75rem !important;
+  white-space: nowrap;
+}
+
+.strategy-label-cell--divider {
+  border-top: 3px solid var(--c-teal) !important;
+}
+
+/* ── Scrollable table wrapper ── */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Schedule tables (page.js toggles these classes) ── */
 .tblHomework {
-    display: table;
+  display: table;
+  border-collapse: separate; /* required for position:sticky on td to work */
+  border-spacing: 0;
 }
+
 .tblExpand {
-    display: table;
+  display: table;
 }
+
 .tblHide {
-	display: none;
+  display: none !important;
+}
+
+.tblHomework td {
+  border: 1px solid var(--c-border);
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* Sticky first column */
+.tblHomework td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: var(--c-white);
+}
+
+/* Header row (first tr per tbody) */
+.tblHomework tr:first-child td {
+  background-color: var(--c-navy);
+  color: #fff;
+  font-weight: 600;
+  border-color: var(--c-navy);
+}
+
+/* Alternating rows */
+.tblHomework tr:nth-child(even) td {
+  background-color: var(--c-stripe);
+}
+
+/* Bold rows — page.js applies .bold to <tr> and first <td> */
+.bold {
+  font-weight: 700 !important;
+}
+
+tr.bold td {
+  background-color: var(--c-teal-light) !important;
+}
+
+/* First row stays navy even when bold */
+.tblHomework tr:first-child.bold td {
+  background-color: var(--c-navy) !important;
+  color: #fff;
 }
