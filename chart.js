@@ -20,12 +20,14 @@
     const pos2 = Math.max(0, ...y2Data);
     const neg2 = -Math.min(0, ...y2Data);
 
-    // posRatio: fraction of total range above zero — must accommodate both axes
+    // posRatio: fraction of total range above zero — must accommodate both axes.
+    // Clamped to [0.15, 0.85] so neither side collapses to zero (which causes div-by-zero
+    // when one axis has data only on one side, e.g. net profit always negative at low appreciation).
     const r1 = pos1 + neg1, r2 = pos2 + neg2;
-    const posRatio = Math.max(
+    const posRatio = Math.min(0.85, Math.max(0.15, Math.max(
       r1 > 0 ? pos1 / r1 : 0.5,
       r2 > 0 ? pos2 / r2 : 0.5,
-    );
+    )));
     const negRatio = 1 - posRatio;
 
     // Expand each axis's range so all data fits with the shared posRatio, plus 5% padding
