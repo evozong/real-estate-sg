@@ -496,10 +496,13 @@ function renderSchedules() {
 		schedRentalIncomeYr.push(val * 12);
 	}
 	let schedRentalIncomeYr2 = formatAsCurrencyString(schedRentalIncomeYr);
-	let rowIncomeYear = createTableRow("Income or Cost of Rental (/yr)", schedRentalIncomeYr2);
+	let rowIncomeYear = createTableRow("Income (/yr)", schedRentalIncomeYr2);
 	rentalHomeworkTable.appendChild(rowIncomeYear);
 
 	let schedRentalIncomeCum = genScheduleCumulative(schedRentalIncomeYr);
+	let schedRentalIncomeCum2 = formatAsCurrencyString(schedRentalIncomeCum);
+	let rowIncomeCum = createTableRow("Income/cumulative", schedRentalIncomeCum2, boldRow);
+	rentalHomeworkTable.appendChild(rowIncomeCum);
 
 	////////////////////////////////////////////////////
 	// Comparison Strategies
