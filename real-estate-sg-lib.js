@@ -350,7 +350,7 @@ function genScheduleStrategyBuyStay_EffectiveRent(scheduleStrategyBuyStay) {
 	let schedule = [];
 	
 	for (let i=0; i<scheduleStrategyBuyStay.length; i++) {
-		schedule.push(scheduleStrategyBuyStay[i] / (12*(i+1)));
+		schedule.push(-scheduleStrategyBuyStay[i] / (12*(i+1)));
 	}
 
 	return schedule;
