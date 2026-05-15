@@ -14,8 +14,8 @@
   }
 
   function updateChart() {
-    const buyStay = parseTableRow('stratBuyStay', 1);       // Net Cashflow row
-    const buyRentout = parseTableRow('stratBuyRentout', 1); // Net Cashflow row
+    const buyStay = parseTableRow('stratBuyStay', 1);       // Net Profit row
+    const buyRentout = parseTableRow('stratBuyRentout', 1); // Net Profit row
     if (!buyStay.length) return;
 
     const labels = buyStay.map((_, i) => 'Yr ' + i);
@@ -24,7 +24,7 @@
       labels,
       datasets: [
         {
-          label: 'Buy & Stay — Net Cashflow',
+          label: 'Buy & Stay — Net Profit',
           data: buyStay,
           borderColor: '#0D9B8C',
           backgroundColor: 'rgba(13,155,140,0.08)',
@@ -33,7 +33,7 @@
           pointRadius: 2,
         },
         {
-          label: 'Buy & Rent Out — Net Cashflow',
+          label: 'Buy & Rent Out — Net Profit',
           data: buyRentout,
           borderColor: '#0F2044',
           backgroundColor: 'rgba(15,32,68,0.06)',

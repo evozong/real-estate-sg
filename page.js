@@ -370,89 +370,74 @@ function renderSchedules() {
 	let scheduleYr = [];
 	for (let i=0; i<genUntilYrs; i++) { scheduleYr.push(i); }
 	let rowYr = createTableRow("End of Year", scheduleYr);
-	homeworkTableHomeInfo.appendChild(rowYr);
 
 	let scheduleHomeValue = genScheduleHomeValue(sim.home.purchPrice, sim.home.appreciation(), genUntilYrs);
 	scheduleHomeValue2 = formatAsCurrencyString(scheduleHomeValue);
 	let rowHomeValue = createTableRow("Value of Home", scheduleHomeValue2);
-	homeworkTableHomeInfo.appendChild(rowHomeValue);
-
-	let scheduleSellFee = genScheduleSellingFee(scheduleHomeValue, sim.home.sellFee())
-	let scheduleSellFee2 = formatAsCurrencyString(scheduleSellFee);
-	let rowSellFee = createTableRow("Selling Fee", scheduleSellFee2);
-	homeworkTableHomeInfo.appendChild(rowSellFee);
-
-	let scheduleSellerStampDuty = genScheduleSellerStampDuty(scheduleHomeValue);
-	let scheduleSellerStampDuty2 = formatAsCurrencyString(scheduleSellerStampDuty);
-	let rowSellerStampDuty = createTableRow("Seller's Stamp Duty", scheduleSellerStampDuty2);
-	homeworkTableHomeInfo.appendChild(rowSellerStampDuty);
-
-	let schedulePrincipalRemaining = genSchedulePrincipalRemaining(sim.loan.loanAmt(), sim.loan.paymentMonthly(), sim.loan.interestMonth(), genUntilYrs);
-	let schedulePrincipalRemaining2 = formatAsCurrencyString(schedulePrincipalRemaining);
-	let rowLoanPrincipal = createTableRow("Principal remaining", schedulePrincipalRemaining2);
-	homeworkTableHomeInfo.appendChild(rowLoanPrincipal);
-
-	let scheduleNetAfterSell = genScheduleNetAfterSell(scheduleHomeValue, scheduleSellFee, scheduleSellerStampDuty, schedulePrincipalRemaining);
-	let scheduleNetAfterSell2 = formatAsCurrencyString(scheduleNetAfterSell);
-	let rowNetProceedsIfSold = createTableRow("Net Proceeds if Sold", scheduleNetAfterSell2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowNetProceedsIfSold);
-
-	let rowFiller = createTableRow("", []);
-	homeworkTableHomeInfo.appendChild(rowFiller);
 
 	let scheduleFixedCosts = [];
 	for (let i=0; i<genUntilYrs; i++) { scheduleFixedCosts.push(sim.home.outOfPocket()); }
 	let scheduleDownpayment2 = formatAsCurrencyString(scheduleFixedCosts);
-	let rowDownpayment = createTableRow("Fixed Cost (Downpayment)", scheduleDownpayment2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowDownpayment);
+	let rowDownpayment = createTableRow("Fixed Cost (Downpayment)", scheduleDownpayment2);
+
+	let scheduleSellFee = genScheduleSellingFee(scheduleHomeValue, sim.home.sellFee())
+	let scheduleSellFee2 = formatAsCurrencyString(scheduleSellFee);
+	let rowSellFee = createTableRow("Selling Fee", scheduleSellFee2);
+
+	let scheduleSellerStampDuty = genScheduleSellerStampDuty(scheduleHomeValue);
+	let scheduleSellerStampDuty2 = formatAsCurrencyString(scheduleSellerStampDuty);
+	let rowSellerStampDuty = createTableRow("Seller's Stamp Duty", scheduleSellerStampDuty2);
+
+	let schedulePrincipalRemaining = genSchedulePrincipalRemaining(sim.loan.loanAmt(), sim.loan.paymentMonthly(), sim.loan.interestMonth(), genUntilYrs);
+	let schedulePrincipalRemaining2 = formatAsCurrencyString(schedulePrincipalRemaining);
+	let rowLoanPrincipal = createTableRow("Loan remaining", schedulePrincipalRemaining2);
+
+	let scheduleNetAfterSell = genScheduleNetAfterSell(scheduleHomeValue, scheduleSellFee, scheduleSellerStampDuty, schedulePrincipalRemaining, scheduleFixedCosts);
+	let scheduleNetAfterSell2 = formatAsCurrencyString(scheduleNetAfterSell);
+	let rowNetProceedsIfSold = createTableRow("Gross Profit if Sold", scheduleNetAfterSell2, boldRow);
+
+	let rowFiller = createTableRow("", []);
 
 	let schedMortgagePaid = genScheduleMortgagePaid(sim.loan.loanTermYrs, sim.loan.paymentAnnual(), genUntilYrs);
 	let schedMortgagePaid2 = formatAsCurrencyString(schedMortgagePaid);
 	let rowMortgage = createTableRow("Mortgage Paid", schedMortgagePaid2);
-	homeworkTableHomeInfo.appendChild(rowMortgage);
-
-	let startRentYr = sim.home.homeSizeSqf * sim.home.rentalAvgPsf * 12;
-	let schedAV = genScheduleAnnualValue(startRentYr, sim.home.appreciation(), genUntilYrs);
-	let schedAV2 = formatAsCurrencyString(schedAV);
-	let rowAV = createTableRow("Annual Value", schedAV2);
-	homeworkTableHomeInfo.appendChild(rowAV);
 
 	let costStdYr = sim.cost.hoaMonth * 12 + sim.cost.insuranceAnnual;
 	let schedOtherCosts = genOtherCosts(costStdYr, sim.cost.inflation(), genUntilYrs);
 	let schedOtherCosts2 = formatAsCurrencyString(schedOtherCosts);
-	let rowOngoingCostStd = createTableRow("Other", schedOtherCosts2);
-	homeworkTableHomeInfo.appendChild(rowOngoingCostStd);
+	let rowOngoingCostStd = createTableRow("Other Expenses", schedOtherCosts2);
 
 	let schedOutflowStdYr = genScheduleOutflowStdYr(schedMortgagePaid, schedOtherCosts, genUntilYrs);
 	let schedOutflowStdYr2 = formatAsCurrencyString(schedOutflowStdYr);
-	let rowOutflowStdYr = createTableRow("Outflow/yr (Std)", schedOutflowStdYr2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowOutflowStdYr);
+	let rowOutflowStdYr = createTableRow("Outflow/yr (Basic)", schedOutflowStdYr2, boldRow);
+
+	let rowFiller2 = createTableRow("", []);
+
+	let startRentYr = sim.home.homeSizeSqf * sim.home.rentalAvgPsf * 12;
+	let schedAV = genScheduleAnnualValue(startRentYr, sim.home.appreciation(), genUntilYrs);
+	let schedAV2 = formatAsCurrencyString(schedAV);
+	let rowAV = createTableRow("Annual Value", schedAV2, boldRow);
 
 	let schedPropertyTaxOwnerOccupied = genSchedulePropertyTax(schedAV, true, genUntilYrs);
 	let schedPropertyTaxOwnerOccupied2 = formatAsCurrencyString(schedPropertyTaxOwnerOccupied);
 	let rowPropertyTax = createTableRow("Property Tax (Owner Occupied)", schedPropertyTaxOwnerOccupied2);
-	homeworkTableHomeInfo.appendChild(rowPropertyTax);
 
 	let costLivingYr = sim.cost.utilitiesMonth * 12;
 	let schedCostLivingYr = genScheduleCostLivingYr(costLivingYr, sim.cost.inflation(), genUntilYrs);
 	let schedCostLivingYr2 = formatAsCurrencyString(schedCostLivingYr);
 	let rowOngoingCostLiving = createTableRow("Utilities (/yr)", schedCostLivingYr2);
-	homeworkTableHomeInfo.appendChild(rowOngoingCostLiving);
 
 	let schedOutflowLivingYr = genScheduleOutflowLivingYr(schedOutflowStdYr, schedPropertyTaxOwnerOccupied, schedCostLivingYr);
 	let schedOutflowLivingYr2 = formatAsCurrencyString(schedOutflowLivingYr);
-	let rowOutflowLivingYr = createTableRow("Outflow/yr (Living)", schedOutflowLivingYr2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowOutflowLivingYr);
+	let rowOutflowLivingYr = createTableRow("Outflow/yr (Living In)", schedOutflowLivingYr2, boldRow);
 
 	let schedOutflowLivingCum = genScheduleCumulative(schedOutflowLivingYr);
 	let schedOutflowLivingCum2 = formatAsCurrencyString(schedOutflowLivingCum);
-	let rowOutflowLivingCum = createTableRow("Outflow/cum (Living))", schedOutflowLivingCum2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowOutflowLivingCum);
+	let rowOutflowLivingCum = createTableRow("Outflow/cumulative (Living In)", schedOutflowLivingCum2, boldRow);
 
 	let schedPropertyTaxRental = genSchedulePropertyTax(schedAV, false, genUntilYrs);
 	let schedPropertyTaxRental2 = formatAsCurrencyString(schedPropertyTaxRental);
 	let rowPropertyTaxRental = createTableRow("Property Tax (Rental)", schedPropertyTaxRental2);
-	homeworkTableHomeInfo.appendChild(rowPropertyTaxRental);
 
 	let schedRentalMgmtCost = [];
 	for (let i=0; i<genUntilYrs; i++) {
@@ -460,16 +445,35 @@ function renderSchedules() {
 	}
 	let schedRentalMgmtCost2 = formatAsCurrencyString(schedRentalMgmtCost);
 	let rowMgmtCost = createTableRow("Mgmt Cost (/yr)", schedRentalMgmtCost2);
-	homeworkTableHomeInfo.appendChild(rowMgmtCost);
 
 	let schedOutflowYrRental = genSchedOutflowYrRental(schedOutflowStdYr, schedPropertyTaxRental, schedRentalMgmtCost);
 	let schedOutflowYrRental2 = formatAsCurrencyString(schedOutflowYrRental);
 	let rowOutflowRentalYr = createTableRow("Outflow/yr (Rental)", schedOutflowYrRental2, boldRow);
-	homeworkTableHomeInfo.appendChild(rowOutflowRentalYr);
 
 	let schedOutflowCumRental = genScheduleCumulative(schedOutflowYrRental);
 	let schedOutflowCumRental2 = formatAsCurrencyString(schedOutflowCumRental);
-	let rowOutflowRentalCum = createTableRow("Outflow/cum (Rental)", schedOutflowCumRental2, boldRow);
+	let rowOutflowRentalCum = createTableRow("Outflow/cumulative (Rental)", schedOutflowCumRental2, boldRow);
+
+	homeworkTableHomeInfo.appendChild(rowYr);
+	homeworkTableHomeInfo.appendChild(rowHomeValue);
+	homeworkTableHomeInfo.appendChild(rowDownpayment);
+	homeworkTableHomeInfo.appendChild(rowSellFee);
+	homeworkTableHomeInfo.appendChild(rowSellerStampDuty);
+	homeworkTableHomeInfo.appendChild(rowLoanPrincipal);
+	homeworkTableHomeInfo.appendChild(rowNetProceedsIfSold);
+	homeworkTableHomeInfo.appendChild(rowFiller);
+	homeworkTableHomeInfo.appendChild(rowMortgage);
+	homeworkTableHomeInfo.appendChild(rowOngoingCostStd);
+	homeworkTableHomeInfo.appendChild(rowOutflowStdYr);
+	homeworkTableHomeInfo.appendChild(rowFiller2);
+	homeworkTableHomeInfo.appendChild(rowAV);
+	homeworkTableHomeInfo.appendChild(rowPropertyTax);
+	homeworkTableHomeInfo.appendChild(rowOngoingCostLiving);
+	homeworkTableHomeInfo.appendChild(rowOutflowLivingYr);
+	homeworkTableHomeInfo.appendChild(rowOutflowLivingCum);
+	homeworkTableHomeInfo.appendChild(rowPropertyTaxRental);
+	homeworkTableHomeInfo.appendChild(rowMgmtCost);
+	homeworkTableHomeInfo.appendChild(rowOutflowRentalYr);
 	homeworkTableHomeInfo.appendChild(rowOutflowRentalCum);
 
 	////////////////////////////////////////////////////
@@ -505,9 +509,9 @@ function renderSchedules() {
 	let rowYr2 = createTableRow("End of Year", scheduleYr2);
 	tbl.appendChild(rowYr2);
 
-	let scheduleStrategyBuyStay_NetCashflow = genScheduleStrategyBuyStay_NetCashflow(scheduleNetAfterSell, scheduleFixedCosts, schedOutflowLivingCum);
+	let scheduleStrategyBuyStay_NetCashflow = genScheduleStrategyBuyStay_NetCashflow(scheduleNetAfterSell, schedOutflowLivingCum);
 	let scheduleStrategyBuyStay_NetCashflow2 = formatAsCurrencyString(scheduleStrategyBuyStay_NetCashflow);
-	let rowStrategyBuyStay_NetCashflow = createTableRow("Net Cashflow", scheduleStrategyBuyStay_NetCashflow2);
+	let rowStrategyBuyStay_NetCashflow = createTableRow("Net Profit", scheduleStrategyBuyStay_NetCashflow2);
 	tbl.appendChild(rowStrategyBuyStay_NetCashflow);
 
 	let scheduleStrategyBuyStay_EffectiveRent = genScheduleStrategyBuyStay_EffectiveRent(scheduleStrategyBuyStay_NetCashflow);
@@ -522,9 +526,9 @@ function renderSchedules() {
 	let rowYr3 = createTableRow("End of Year", scheduleYr3);
 	tbl2.appendChild(rowYr3);
 
-	let scheduleStrategyBuyRentout_NetCashflow = genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, scheduleFixedCosts, schedOutflowCumRental, schedRentalIncomeYr);
+	let scheduleStrategyBuyRentout_NetCashflow = genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, schedOutflowCumRental, schedRentalIncomeYr);
 	let scheduleStrategyBuyRentout_NetCashflow2 = formatAsCurrencyString(scheduleStrategyBuyRentout_NetCashflow);
-	let rowStrategyBuyRentout_NetCashflow = createTableRow("Net Cashflow", scheduleStrategyBuyRentout_NetCashflow2);
+	let rowStrategyBuyRentout_NetCashflow = createTableRow("Net Profit", scheduleStrategyBuyRentout_NetCashflow2);
 	tbl2.appendChild(rowStrategyBuyRentout_NetCashflow);
 }
 

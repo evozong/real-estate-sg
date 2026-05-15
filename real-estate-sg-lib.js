@@ -194,11 +194,11 @@ function genSchedulePrincipalRemaining(loanAmt, monthlyPayment, interestMonth, g
 	return schedule;
 }
 
-function genScheduleNetAfterSell(scheduleHomeValue, scheduleSellFee, scheduleSellerStampDuty, schedulePrincipalRemaining) {
+function genScheduleNetAfterSell(scheduleHomeValue, scheduleSellFee, scheduleSellerStampDuty, schedulePrincipalRemaining, scheduleFixedCosts) {
 	let schedule = [];
 
 	for (let i=0; i<scheduleHomeValue.length; i++) {
-		val = scheduleHomeValue[i] - scheduleSellFee[i] - scheduleSellerStampDuty[i] - schedulePrincipalRemaining[i];
+		val = scheduleHomeValue[i] - scheduleSellFee[i] - scheduleSellerStampDuty[i] - schedulePrincipalRemaining[i] - scheduleFixedCosts[i];
 		schedule.push(val);
 	}
 
@@ -335,11 +335,11 @@ function calcRentalPerYear(rentalStartAtYr, rentalIncome, rentalMgmtCost, rental
 	return rentalPerYear;
 }
 
-function genScheduleStrategyBuyStay_NetCashflow(scheduleNetAfterSell, schedFixedCost, schedOutflowLivingCum) {
+function genScheduleStrategyBuyStay_NetCashflow(scheduleNetAfterSell, schedOutflowLivingCum) {
 	let schedule = [];
 
 	for (let i=0; i<scheduleNetAfterSell.length; i++) {
-		let val = scheduleNetAfterSell[i] - schedFixedCost[i] - schedOutflowLivingCum[i];
+		let val = scheduleNetAfterSell[i] - schedOutflowLivingCum[i];
 		schedule.push(val);
 	}
 
@@ -356,11 +356,11 @@ function genScheduleStrategyBuyStay_EffectiveRent(scheduleStrategyBuyStay) {
 	return schedule;
 }
 
-function genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, scheduleDownpayment, schedOutflowCumRental, schedRentalIncomeYr) {
+function genScheduleStrategyBuyRentout_NetCashflow(scheduleNetAfterSell, schedOutflowCumRental, schedRentalIncomeYr) {
 	let schedule = [];
 
 	for (let i=0; i<scheduleNetAfterSell.length; i++) {
-		let val = scheduleNetAfterSell[i] - scheduleDownpayment[i] - schedOutflowCumRental[i] + schedRentalIncomeYr[i];
+		let val = scheduleNetAfterSell[i] - schedOutflowCumRental[i] + schedRentalIncomeYr[i];
 		schedule.push(val);
 	}
 
