@@ -45,7 +45,9 @@ function calcBuyerStampDuty(purchasePrice, marketValue = 0) {
           [180000, 0.01] // First $180,000 at 1%
         , [180000, 0.02] // Next $180,000 at 2%
         , [640000, 0.03] // Next $640,000 at 3%
-        , [Number.MAX_VALUE, 0.04] // All the rest at 4%
+        , [500000, 0.04] // Next $500,000 at 4%
+        , [1500000, 0.05] // Next $1,500,000 at 5%
+        , [Number.MAX_VALUE, 0.06] // Remainder at 6%
     ];
 
 		let bsd = applyBrackets(brackets, computeOn);
@@ -67,9 +69,9 @@ function additionalBuyerStampDuty(numProperties, purchasePrice, marketValue = 0)
     let computeOn = Math.max(purchasePrice, marketValue)
     let absd = "ERR";
     if (numProperties == 2) {
-        absd = 0.17 * computeOn;
+        absd = 0.20 * computeOn;
     } else {
-        absd = 0.25 * computeOn;
+        absd = 0.30 * computeOn;
     }
 
     console.debug("\tabsd = " + absd);
@@ -100,17 +102,17 @@ function calcMonthlyPayments(loanAmount, monthlyInterestRate, numPayments) {
 function propertyTax(annualValue, isOwnerOccupied) {
 	console.debug("propertyTax(" + annualValue + ")");
 	// Ref: https://www.iras.gov.sg/taxes/property-tax/property-owners/property-tax-rates
-	// Note: For owner-occupied only! Rental properties have higher property tax.
+	// Note: Owner-occupied vs Rental properties have different property tax, depending on isOwnerOccupied.
 
 	const brackets_OwnerOccupied = [
-		// bracketMax, rate
-		  [8000, 0] // First 8k no tax
-		, [22000, 0.04] // Next 22k at 4%
+		// bracketMax, rate (effective 1 Jan 2025)
+		  [12000, 0] // First 12k no tax
+		, [28000, 0.04] // Next 28k at 4%
 		, [10000, 0.06]
-		, [15000, 0.10]
-		, [15000, 0.14]
+		, [25000, 0.10]
+		, [10000, 0.14]
 		, [15000, 0.20]
-		, [15000, 0.26]
+		, [40000, 0.26]
 		, [Number.MAX_VALUE, 0.32] // Rest at 32%
 	];
 	const brackets_Rental = [
@@ -129,12 +131,15 @@ function propertyTax(annualValue, isOwnerOccupied) {
 
 function sellerStampDuty(yearSold, marketValue) {
 	// Ref: https://www.iras.gov.sg/taxes/stamp-duty/for-property/selling-or-disposing-property/seller's-stamp-duty-(ssd)-for-residential-property
+	// Rates effective 4 Jul 2025: holding period extended from 3 to 4 years, rates raised 4pp per tier.
+	// Applies to properties with OTP granted on/after 4 Jul 2025.
 
 	let rate = NaN;
 	switch(yearSold) {
-		case 0: rate = 0.12; break;
-		case 1: rate = 0.08; break;
-		case 2: rate = 0.04; break;
+		case 0: rate = 0.16; break;
+		case 1: rate = 0.12; break;
+		case 2: rate = 0.08; break;
+		case 3: rate = 0.04; break;
 		default: rate = 0.0; break;
 	}
 
